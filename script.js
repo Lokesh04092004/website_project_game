@@ -5,32 +5,28 @@ const movieInput = document.getElementById('movieInput');
 const songInput = document.getElementById('songInput');
 const timerInput = document.getElementById('timerInput');
 
-const plusContainer = document.querySelector('.plus-container');
-const initHero = document.getElementById('initHero');
-const initHeroine = document.getElementById('initHeroine');
-const initMovie = document.getElementById('initMovie');
-const initSong = document.getElementById('initSong');
-
-const turnInfo = document.querySelector('.turn-info');
-const currentTeamSpan = document.getElementById('currentTeam');
-const timerDisplay = document.querySelector('.timer');
-const timerSpan = document.getElementById('timer');
-
-const guessSection = document.querySelector('.guess-section');
-const guessHero = document.getElementById('guessHero');
-const guessHeroine = document.getElementById('guessHeroine');
-const guessMovie = document.getElementById('guessMovie');
-const guessSong = document.getElementById('guessSong');
-const guessBtn = document.getElementById('guessBtn');
-const statusDiv = document.getElementById('status');
-
-const gridContainer = document.querySelector('.grid-container');
+const plusGrid = document.querySelector('.plus-grid');
 const gridHero = document.getElementById('gridHero');
 const gridHeroine = document.getElementById('gridHeroine');
 const gridMovie = document.getElementById('gridMovie');
 const gridSong = document.getElementById('gridSong');
 
 const kollywoodLetters = document.querySelectorAll('.kollywood-letter');
+
+const turnInfo = document.querySelector('.turn-info');
+const currentTeamSpan = document.getElementById('currentTeam');
+const timerDisplay = document.querySelector('.timer');
+const timerSpan = document.getElementById('timer');
+
+const categorySelect = document.querySelector('.category-select');
+const categoryButtons = document.querySelectorAll('.category-btn');
+
+const guessInputSection = document.querySelector('.guess-input-section');
+const selectedCategoryName = document.getElementById('selectedCategoryName');
+const guessInput = document.getElementById('guessInput');
+const submitGuessBtn = document.getElementById('submitGuessBtn');
+
+const statusDiv = document.getElementById('status');
 
 const scoreboard = document.querySelector('.scoreboard');
 const scoreTeam1Span = document.getElementById('scoreTeam1');
@@ -60,26 +56,15 @@ let guessedCorrectly = {
   song: false,
 };
 
-function resetGuessInputs() {
-  guessHero.value = '';
-  guessHeroine.value = '';
-  guessMovie.value = '';
-  guessSong.value = '';
-  statusDiv.textContent = '';
-}
+let selectedCategory = null;
 
-function updatePlusInitials() {
-  initHero.textContent = challenge.hero ? challenge.hero[0].toUpperCase() : 'H';
-  initHeroine.textContent = challenge.heroine ? challenge.heroine[0].toUpperCase() : 'R';
-  initMovie.textContent = challenge.movie ? challenge.movie[0].toUpperCase() : 'M';
-  initSong.textContent = challenge.song ? challenge.song[0].toUpperCase() : 'S';
+function updateGridInitials() {
+  gridHero.textContent = challenge.hero[0].toUpperCase();
+  gridHeroine.textContent = challenge.heroine[0].toUpperCase();
+  gridMovie.textContent = challenge.movie[0].toUpperCase();
+  gridSong.textContent = challenge.song[0].toUpperCase();
 
-  gridHero.textContent = initHero.textContent;
-  gridHeroine.textContent = initHeroine.textContent;
-  gridMovie.textContent = initMovie.textContent;
-  gridSong.textContent = initSong.textContent;
-
-  // Clear all crossed classes
+  // Clear crossed styles
   [gridHero, gridHeroine, gridMovie, gridSong].forEach(e => e.classList.remove('crossed'));
   kollywoodLetters.forEach(e => e.classList.remove('crossed'));
 
@@ -146,7 +131,8 @@ function endRound(wonByCurrentTeam) {
     statusDiv.textContent = `Opponent team wins this round!`;
   }
 
-  guessBtn.disabled = true;
+  submitGuessBtn.disabled = true;
+  categoryButtons.forEach(btn => btn.disabled = true);
 
   setTimeout(() => {
     alert(statusDiv.textContent + '\n\nSet new challenge for next round.');
@@ -156,21 +142,19 @@ function endRound(wonByCurrentTeam) {
 
 function resetGameForNextRound() {
   challengeSetup.style.display = 'block';
-  plusContainer.style.display = 'none';
+  plusGrid.style.display = 'none';
+  categorySelect.style.display = 'none';
+  guessInputSection.style.display = 'none';
   turnInfo.style.display = 'none';
   timerDisplay.style.display = 'none';
-  guessSection.style.display = 'none';
-  gridContainer.style.display = 'none';
   scoreboard.style.display = 'block';
   statusDiv.textContent = '';
-  guessBtn.disabled = false;
+  submitGuessBtn.disabled = false;
 
-  // Reset guesses & counters
   guessedCorrectly = { hero: false, heroine: false, movie: false, song: false };
   crossedInitialsCount = 0;
   crossedKollywoodCount = 0;
 
-  // Clear input fields
   heroInput.value = '';
   heroineInput.value = '';
   movieInput.value = '';
@@ -193,73 +177,78 @@ setChallengeBtn.addEventListener('click', () => {
     return;
   }
 
-  if (isNaN(timeSeconds) || timeSeconds < 10 || timeSeconds > 300) {
-    alert('Please enter a valid timer between 10 and 300 seconds.');
+  if (isNaN(timeSeconds) || timeSeconds < 10 || timeSeconds > 900) {
+    alert('Please enter a valid timer between 10 and 900 seconds.');
     return;
   }
 
   challenge = { hero: h, heroine: hr, movie: m, song: s };
 
-  updatePlusInitials();
+  updateGridInitials();
 
-  challengeSetup.style.display = 'none';  // Hide inputs
-  plusContainer.style.display = 'block';
+  challengeSetup.style.display = 'none';
+  plusGrid.style.display = 'grid';
+  categorySelect.style.display = 'block';
+  guessInputSection.style.display = 'none'; // hidden until category chosen
   turnInfo.style.display = 'block';
-  guessSection.style.display = 'block';
-  gridContainer.style.display = 'block';
   scoreboard.style.display = 'block';
 
   resetGuessInputs();
+
   guessedCorrectly = { hero: false, heroine: false, movie: false, song: false };
 
   updateTurnInfo();
 
   startTimer(timeSeconds);
   statusDiv.textContent = '';
-  guessBtn.disabled = false;
 });
 
-guessBtn.addEventListener('click', () => {
-  if (allInitialsCrossed() || allKollywoodCrossed()) return; // Round ended
+function resetGuessInputs() {
+  guessInput.value = '';
+  statusDiv.textContent = '';
+}
 
-  const gHero = guessHero.value.trim().toLowerCase();
-  const gHeroine = guessHeroine.value.trim().toLowerCase();
-  const gMovie = guessMovie.value.trim().toLowerCase();
-  const gSong = guessSong.value.trim().toLowerCase();
+categoryButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    selectedCategory = btn.dataset.cat;
+    selectedCategoryName.textContent = btn.textContent;
+    guessInputSection.style.display = 'block';
+    resetGuessInputs();
+    guessInput.focus();
+  });
+});
 
-  let correctGuessThisTurn = false;
-  let wrongGuessThisTurn = true;
-
-  if (!guessedCorrectly.hero && gHero && gHero === challenge.hero.toLowerCase()) {
-    guessedCorrectly.hero = true;
-    crossInitialLetter('hero');
-    correctGuessThisTurn = true;
-    wrongGuessThisTurn = false;
+submitGuessBtn.addEventListener('click', () => {
+  if (!selectedCategory) {
+    statusDiv.textContent = 'Please select a category first.';
+    return;
   }
-  if (!guessedCorrectly.heroine && gHeroine && gHeroine === challenge.heroine.toLowerCase()) {
-    guessedCorrectly.heroine = true;
-    crossInitialLetter('heroine');
-    correctGuessThisTurn = true;
-    wrongGuessThisTurn = false;
-  }
-  if (!guessedCorrectly.movie && gMovie && gMovie === challenge.movie.toLowerCase()) {
-    guessedCorrectly.movie = true;
-    crossInitialLetter('movie');
-    correctGuessThisTurn = true;
-    wrongGuessThisTurn = false;
-  }
-  if (!guessedCorrectly.song && gSong && gSong === challenge.song.toLowerCase()) {
-    guessedCorrectly.song = true;
-    crossInitialLetter('song');
-    correctGuessThisTurn = true;
-    wrongGuessThisTurn = false;
+  if (guessedCorrectly[selectedCategory]) {
+    statusDiv.textContent = `You already guessed ${selectedCategory} correctly! Choose another category.`;
+    return;
   }
 
-  if (correctGuessThisTurn) {
-    statusDiv.textContent = 'Correct guess! Letter crossed in initials.';
-  } else if (wrongGuessThisTurn) {
+  const guess = guessInput.value.trim().toLowerCase();
+  if (!guess) {
+    statusDiv.textContent = 'Please enter a guess.';
+    return;
+  }
+
+  let correctAnswer = challenge[selectedCategory].toLowerCase();
+
+  if (guess === correctAnswer) {
+    guessedCorrectly[selectedCategory] = true;
+    crossInitialLetter(selectedCategory);
+    statusDiv.textContent = `Correct! ${selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1)} guessed.`;
+
+    // Disable that category button
+    categoryButtons.forEach(btn => {
+      if (btn.dataset.cat === selectedCategory) btn.disabled = true;
+    });
+
+  } else {
     crossKollywoodLetter();
-    statusDiv.textContent = 'Wrong guess! Letter crossed in KOLLYWOOD.';
+    statusDiv.textContent = `Wrong guess! Letter crossed in KOLLYWOOD.`;
   }
 
   resetGuessInputs();
