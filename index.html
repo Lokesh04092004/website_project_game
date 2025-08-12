@@ -1,68 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" >
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kollywood Guessing Game</title>
-<link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kollywood Guessing Game</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-<h1>Kollywood Guessing Game</h1>
+  <h1>Kollywood Guessing Game</h1>
 
-<div>
-  <h2>Set Challenge (Custom Mode)</h2>
-  <div class="inputs-container">
-    <div>
-      <label for="heroInput">Hero</label>
-      <input id="heroInput" type="text" maxlength="20" placeholder="Enter Hero name" />
+  <div id="challengeSetup">
+    <h2>Set Challenge (Custom Mode)</h2>
+    <div class="inputs-container">
+      <div>
+        <label for="heroInput">Hero</label>
+        <input id="heroInput" type="text" maxlength="20" placeholder="Enter Hero name" />
+      </div>
+      <div>
+        <label for="heroineInput">Heroine</label>
+        <input id="heroineInput" type="text" maxlength="20" placeholder="Enter Heroine name" />
+      </div>
+      <div>
+        <label for="movieInput">Movie</label>
+        <input id="movieInput" type="text" maxlength="30" placeholder="Enter Movie name" />
+      </div>
+      <div>
+        <label for="songInput">Song</label>
+        <input id="songInput" type="text" maxlength="30" placeholder="Enter Song name" />
+      </div>
+      <div>
+        <label for="timerInput">Set Timer (seconds)</label>
+        <input id="timerInput" type="number" min="10" max="300" value="60" />
+      </div>
     </div>
-    <div>
-      <label for="heroineInput">Heroine</label>
-      <input id="heroineInput" type="text" maxlength="20" placeholder="Enter Heroine name" />
+    <button id="setChallengeBtn">Set Challenge</button>
+  </div>
+
+  <div class="plus-container" style="display:none;">
+    <div class="plus-line horizontal"></div>
+    <div class="plus-line vertical"></div>
+    <div id="initHero" class="letter-box top">H</div>
+    <div id="initHeroine" class="letter-box right">R</div>
+    <div id="initMovie" class="letter-box bottom">M</div>
+    <div id="initSong" class="letter-box left">S</div>
+  </div>
+
+  <div class="turn-info" style="display:none;">
+    Team <span id="currentTeam">1</span>'s Turn
+  </div>
+  <div class="timer" style="display:none;">
+    Time Left: <span id="timer">60</span>s
+  </div>
+
+  <div class="guess-section" style="display:none;">
+    <h3>Enter Your Guesses</h3>
+    <div class="guess-inputs">
+      <input id="guessHero" placeholder="Hero" />
+      <input id="guessHeroine" placeholder="Heroine" />
+      <input id="guessMovie" placeholder="Movie" />
+      <input id="guessSong" placeholder="Song" />
     </div>
-    <div>
-      <label for="movieInput">Movie</label>
-      <input id="movieInput" type="text" maxlength="30" placeholder="Enter Movie name" />
+    <button id="guessBtn">Submit Guess</button>
+    <div class="status" id="status"></div>
+  </div>
+
+  <div class="grid-container" style="display:none;">
+    <div class="initials-grid">
+      <div class="grid-letter" id="gridHero">H</div>
+      <div class="grid-letter" id="gridHeroine">R</div>
+      <div class="grid-letter" id="gridMovie">M</div>
+      <div class="grid-letter" id="gridSong">S</div>
     </div>
-    <div>
-      <label for="songInput">Song</label>
-      <input id="songInput" type="text" maxlength="30" placeholder="Enter Song name" />
+    <div class="kollywood-grid">
+      <span class="kollywood-letter">K</span>
+      <span class="kollywood-letter">O</span>
+      <span class="kollywood-letter">L</span>
+      <span class="kollywood-letter">L</span>
+      <span class="kollywood-letter">Y</span>
+      <span class="kollywood-letter">W</span>
+      <span class="kollywood-letter">O</span>
+      <span class="kollywood-letter">O</span>
+      <span class="kollywood-letter">D</span>
     </div>
   </div>
-  <button id="setChallengeBtn">Set Challenge</button>
-</div>
 
-<div class="plus-container" style="display:none;">
-  <div class="plus-line horizontal"></div>
-  <div class="plus-line vertical"></div>
-  <div id="initHero" class="letter-box top">H</div>
-  <div id="initHeroine" class="letter-box right">R</div>
-  <div id="initMovie" class="letter-box bottom">M</div>
-  <div id="initSong" class="letter-box left">S</div>
-</div>
-
-<div class="turn-info" style="display:none;">
-  Team <span id="currentTeam">1</span>'s Turn — Chances Left: <span id="chancesLeft">9</span>
-</div>
-<div class="timer" style="display:none;">Time Left: <span id="timer">60</span>s</div>
-
-<div class="guess-section" style="display:none;">
-  <h3>Enter Your Guesses</h3>
-  <div class="guess-inputs">
-    <input id="guessHero" placeholder="Hero" />
-    <input id="guessHeroine" placeholder="Heroine" />
-    <input id="guessMovie" placeholder="Movie" />
-    <input id="guessSong" placeholder="Song" />
+  <div class="scoreboard" style="display:none;">
+    <div>Team 1 Score: <span id="scoreTeam1">0</span></div>
+    <div>Team 2 Score: <span id="scoreTeam2">0</span></div>
   </div>
-  <button id="guessBtn">Submit Guess</button>
-  <div class="status" id="status"></div>
-</div>
 
-<div class="scoreboard" style="display:none;">
-  <div>Team 1 Score: <span id="scoreTeam1">0</span></div>
-  <div>Team 2 Score: <span id="scoreTeam2">0</span></div>
-</div>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
