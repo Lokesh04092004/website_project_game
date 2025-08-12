@@ -1,25 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Franchise Flashcards</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kollywood Guessing Game</title>
+<link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <h1>Franchise Flashcards</h1>
-    <select id="themeSelector" aria-label="Choose theme">
-      <option value="bleach">jack</option>
-      <option value="got">vishal</option>
-      <option value="bb">Breaking Bad</option>
-    </select>
-  </header>
+<h1>Kollywood Guessing Game</h1>
 
-  <main id="flashcardContainer" role="main" aria-live="polite">
-    <!-- Cards will be generated here -->
-  </main>
+<div>
+  <h2>Set Challenge (Custom Mode)</h2>
+  <div class="inputs-container">
+    <div>
+      <label for="heroInput">Hero</label>
+      <input id="heroInput" type="text" maxlength="20" placeholder="Enter Hero name" />
+    </div>
+    <div>
+      <label for="heroineInput">Heroine</label>
+      <input id="heroineInput" type="text" maxlength="20" placeholder="Enter Heroine name" />
+    </div>
+    <div>
+      <label for="movieInput">Movie</label>
+      <input id="movieInput" type="text" maxlength="30" placeholder="Enter Movie name" />
+    </div>
+    <div>
+      <label for="songInput">Song</label>
+      <input id="songInput" type="text" maxlength="30" placeholder="Enter Song name" />
+    </div>
+  </div>
+  <button id="setChallengeBtn">Set Challenge</button>
+</div>
 
-  <script src="script.js"></script>
+<div class="plus-container" style="display:none;">
+  <div class="plus-line horizontal"></div>
+  <div class="plus-line vertical"></div>
+  <div id="initHero" class="letter-box top">H</div>
+  <div id="initHeroine" class="letter-box right">R</div>
+  <div id="initMovie" class="letter-box bottom">M</div>
+  <div id="initSong" class="letter-box left">S</div>
+</div>
+
+<div class="turn-info" style="display:none;">
+  Team <span id="currentTeam">1</span>'s Turn — Chances Left: <span id="chancesLeft">9</span>
+</div>
+<div class="timer" style="display:none;">Time Left: <span id="timer">60</span>s</div>
+
+<div class="guess-section" style="display:none;">
+  <h3>Enter Your Guesses</h3>
+  <div class="guess-inputs">
+    <input id="guessHero" placeholder="Hero" />
+    <input id="guessHeroine" placeholder="Heroine" />
+    <input id="guessMovie" placeholder="Movie" />
+    <input id="guessSong" placeholder="Song" />
+  </div>
+  <button id="guessBtn">Submit Guess</button>
+  <div class="status" id="status"></div>
+</div>
+
+<div class="scoreboard" style="display:none;">
+  <div>Team 1 Score: <span id="scoreTeam1">0</span></div>
+  <div>Team 2 Score: <span id="scoreTeam2">0</span></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
