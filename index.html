@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Top Movie Guessing</title>
   <style>
+    /* Reset & Body Styles */
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -16,6 +17,8 @@
       justify-content: center;
       height: 100vh;
     }
+
+    /* App Title */
     h1 {
       margin-bottom: 40px;
       font-size: 2rem;
@@ -24,6 +27,8 @@
       color: transparent;
       text-align: center;
     }
+
+    /* Play Button Circle */
     .play-btn {
       width: 120px;
       height: 120px;
@@ -39,11 +44,13 @@
       position: relative;
       gap: 10px;
     }
+
     .play-btn:hover {
       transform: scale(1.05);
       background: linear-gradient(to right, black, silver);
       box-shadow: 0 12px 25px rgba(0,0,0,0.5);
     }
+
     .play-btn::before {
       content: "";
       border-left: 28px solid white;
@@ -51,6 +58,7 @@
       border-bottom: 18px solid transparent;
       margin-left: 6px;
     }
+
     .game-body {
       background: #0f172a;
       color: white;
@@ -61,7 +69,9 @@
       height: 100%;
       box-sizing: border-box;
     }
+
     .game-body h1 { color: #22d3ee; }
+
     .frames {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
@@ -69,6 +79,7 @@
       margin: 20px auto;
       max-width: 900px;
     }
+
     .frame {
       position: relative;
       width: 160px;
@@ -77,6 +88,7 @@
       cursor: pointer;
       margin: auto;
     }
+
     .frame-inner {
       position: relative;
       width: 100%;
@@ -84,9 +96,11 @@
       transform-style: preserve-3d;
       transition: transform 0.8s;
     }
+
     .frame.flipped .frame-inner {
       transform: rotateY(180deg);
     }
+
     .frame-front, .frame-back {
       position: absolute;
       width: 100%;
@@ -95,6 +109,7 @@
       border: 2px solid #22d3ee;
       border-radius: 8px;
     }
+
     .frame-front {
       background: #1e293b;
       display: flex;
@@ -103,16 +118,19 @@
       font-weight: bold;
       font-size: 1.2rem;
     }
+
     .frame-back {
       transform: rotateY(180deg);
       background-size: cover;
       background-position: center;
     }
+
     .timer {
       margin-top: 20px;
       font-size: 1.3rem;
       color: #60a5fa;
     }
+
     .result, .countdown {
       margin-top: 30px;
       font-size: 1.5rem;
@@ -156,11 +174,12 @@ function startGame() {
   let movie4Name = "captain america :winter solider";
   let totalFrames = 5;
 
+  // Correct image paths
   let frameImages = [
     "images/banner1.jpg",
     "images/banner2.jpg",
-    "images/icon1.jpg",
-    "images/icon2.jpg",
+    "images/icon1.png",
+    "images/icon2.png",
     "images/footer-bg.jpg"
   ];
 
@@ -226,3 +245,4 @@ function startGame() {
 
 </body>
 </html>
+
