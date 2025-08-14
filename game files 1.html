@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Movie Guessing</title>
+  <style>
+    /* Reset & Body Styles */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #0f2027, #203a43, #2c5364);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    /* App Title */
+    h1 {
+      margin-bottom: 40px;
+      font-size: 2rem;
+      background: linear-gradient(90deg, #22d3ee, #60a5fa);
+      -webkit-background-clip: text;
+      color: transparent;
+      text-align: center;
+    }
+
+    /* Play Button Circle */
+    .play-btn {
+      width: 120px;
+      height: 120px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+      border: 2px solid rgba(255,255,255,0.3);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      position: relative;
+      gap: 10px;
+    }
+
+    .play-btn:hover {
+      transform: scale(1.05);
+      background: linear-gradient(to right,black, silver);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.5);
+    }
+
+    /* Triangle Symbol Inside Button */
+    .play-btn::before {
+      content: "";
+      border-left: 28px solid white;
+      border-top: 18px solid transparent;
+      border-bottom: 18px solid transparent;
+      margin-left: 6px; /* centers visually */
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Guess The Movie</h1>
+
+  <!-- Play Button -->
+  <div class="play-btn" id="playButton"><p>PLAY</p></div>
+
+  <script>
+    // Click event for play button
+document.getElementById('playButton').addEventListener('click', () => {
+  window.location.href = 'game.html';
+});      // You can redirect to your game page:
+      // window.location.href = 'game.html';
+
+  </script>
+
+</body>
+</html>

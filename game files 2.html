@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guess the Movie</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+    padding: 20px;
+  }
+
+  h1 { color: #22d3ee; }
+
+  .frames {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 15px;
+    margin: 20px auto;
+    max-width: 900px;
+  }
+
+  .frame {
+    position: relative;
+    width: 160px;
+    height: 240px;
+    perspective: 1000px;
+    cursor: pointer;
+    margin: auto;
+  }
+
+  .frame-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.8s;
+  }
+
+  .frame.flipped .frame-inner {
+    transform: rotateY(180deg);
+  }
+
+  .frame-front, .frame-back {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    border: 2px solid #22d3ee;
+    border-radius: 8px;
+  }
+
+  .frame-front {
+    background: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  .frame-back {
+    transform: rotateY(180deg);
+    background-size: cover;
+    background-position: center;
+  }
+
+  .timer {
+    margin-top: 20px;
+    font-size: 1.3rem;
+    color: #60a5fa;
+  }
+
+  .result, .countdown {
+    margin-top: 30px;
+    font-size: 1.5rem;
+    color: #facc15;
+  }
+</style>
+</head>
+<body>
+
+<h1>Guess the Movie</h1>
+
+<div class="timer">Time: <span id="time">0</span> sec</div>
+
+<div class="frames" id="frameContainer"></div>
+
+<div style="margin-top:20px;">
+  <input type="text" id="guessInput" placeholder="Enter movie name">
+  <button id="guessBtn">Guess</button>
+</div>
+
+<div class="result" id="result"></div>
+<div class="countdown" id="countdown"></div>
+
+<script>
+let startTime = Date.now();
+let timeInterval;
+let flippedCount = 0;
+let movieName = "Winter Soldier" // <-- change to your movie name
+let movie2Name = "Captain america: winter soldier";
+let movie3Name="captain america : winter solider";
+let movie4Name = "captain america :winter solider";
+
+let totalFrames = 5;
+
+// Images for each frame
+let frameImages = [
+  "frame1.png",
+  "frame2.png",
+  "frame3.png",
+  "frame4.png",
+  "frame5.png"
+];
+
+// Timer update
+function updateTimer() {
+  let elapsed = Math.floor((Date.now() - startTime) / 1000);
+  document.getElementById("time").textContent = elapsed;
+}
+
+// Start timer
+timeInterval = setInterval(updateTimer, 1000);
+
+// Create frames
+const frameContainer = document.getElementById("frameContainer");
+for (let i = 0; i < totalFrames; i++) {
+  let frame = document.createElement("div");
+  frame.className = "frame";
+  frame.innerHTML = `
+    <div class="frame-inner">
+      <div class="frame-front">?</div>
+      <div class="frame-back" style="background-image: url('${frameImages[i]}');"></div>
+    </div>
+  `;
+  frame.addEventListener("click", () => {
+    if (!frame.classList.contains("flipped")) {
+      frame.classList.add("flipped");
+      flippedCount++;
+    }
+  });
+  frameContainer.appendChild(frame);
+}
+
+// Guess logic
+document.getElementById("guessBtn").addEventListener("click", () => {
+  let guess = document.getElementById("guessInput").value.trim();
+  if (guess.toLowerCase() === movieName.toLowerCase() || guess.toLowerCase() === movie2Name.toLowerCase() || guess.toLowerCase() === movie3Name.toLowerCase() || guess.toLowerCase() === movie4Name.toLowerCase()) {
+    clearInterval(timeInterval);
+    let timeTaken = document.getElementById("time").textContent;
+    document.getElementById("result").textContent =
+      `🎉 Correct! You found it in ${timeTaken} seconds using ${flippedCount} frames.`;
+    
+    // Start countdown for next movie (e.g., 2 minutes)
+    let countdownTime = 2 * 60; // seconds
+    let countdownEl = document.getElementById("countdown");
+
+    let cdInterval = setInterval(() => {
+      let min = String(Math.floor(countdownTime / 60)).padStart(2, "0");
+      let sec = String(countdownTime % 60).padStart(2, "0");
+      countdownEl.textContent = `Next movie in 00:${min}:${sec} hrs`;
+      countdownTime--;
+      if (countdownTime < 0) {
+        clearInterval(cdInterval);
+        countdownEl.textContent = "Next movie is ready!";
+      }
+    }, 1000);
+  } else {
+    document.getElementById("result").textContent = "❌ Wrong guess, try again!";
+  }
+});
+</script>
+
+</body>
+</html>
